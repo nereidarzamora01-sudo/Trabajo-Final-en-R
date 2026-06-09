@@ -5,7 +5,7 @@ La regresión lineal múltiple es un modelo estadístico que permite explicar un
 
 ## El modelo
 $$
-\text{vida}_i = \beta_0 + \beta_1 \cdot \log_{10}(\text{pibpc}_i) + \beta_2 \cdot \text{infl}_i + \varepsilon_i \tag{1}
+\text{vida}_i= \beta_0 + \beta_1 \cdot \log_{10}(\text{pibpc}_i) + \beta_2 \cdot \text{infl}_i + \varepsilon_i \tag{1}
 $$
 
 | Variable | Descripción |
