@@ -76,4 +76,4 @@ lm(vida ~ log_pibpc + infl, data = datos_sim)
 - **`infl` (β₂ = −0.23, p < 0.001):** por cada punto porcentual adicional de inflación, la esperanza de vida cae en promedio **0.23 años**, manteniendo el PIB constante. El efecto es estadísticamente significativo y consistente con la hipótesis teórica.
 - El modelo explica el **68% de la varianza** en esperanza de vida (R² = 0.68), lo cual es un ajuste robusto para datos simulados con n = 18.
 
-> Los datos son simulados con fines académicos (`set.seed(123)`). Los coeficientes reproducen las relaciones teóricas esperadas por la Curva de Preston y la literatura sobre inflación y salud.
+> Los datos son simulados con fines académicos (`set.seed(123)`). 
