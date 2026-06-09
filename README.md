@@ -4,7 +4,9 @@
 La regresión lineal múltiple es un modelo estadístico que permite explicar una variable dependiente a partir de dos o más variables independientes. En este caso, la variable dependiente es la **esperanza de vida al nacer** (en años), siguiendo la estructura de la Clase 3 de la Profesora Lesly Flores.
 
 ## El modelo
-\[\text{vida}_i = \beta_0 + \beta_1 \cdot \log_{10}(\text{pibpc}_i) + \beta_2 \cdot \text{infl}_i + \varepsilon_i\]
+$$
+\text{vida}_i = \beta_0 + \beta_1 \cdot \log_{10}(\text{pibpc}_i) + \beta_2 \cdot \text{infl}_i + \varepsilon_i \tag{1}
+$$
 
 | Variable | Descripción |
 |---|---|
