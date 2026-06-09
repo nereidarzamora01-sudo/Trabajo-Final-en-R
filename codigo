@@ -1,0 +1,106 @@
+#========================================================
+# Alumna: Nereida Rodriguez
+# Universidad de Guanajuato
+# Profesora: Lesly Flores
+#========================================================
+# Clase 3 (adaptada): Regresión lineal múltiple con datos simulados
+# Objetivo: Estimar un modelo de vida esperada (años) en función
+# de PIB per cápita (log) e inflación (%) con datos simulados
+#========================================================
+
+# install.packages("WDI")
+# install.packages("dplyr")
+# install.packages("ggplot2")
+# install.packages("ggcorrplot")
+
+library(WDI)
+library(dplyr)
+library(ggplot2)
+library(ggcorrplot)
+
+#========================================================
+# (1) Generación de datos simulados (18 países latinoamericanos)
+#========================================================
+
+set.seed(123)  # para que los resultados sean reproducibles
+
+n_países <- 18
+
+# Simulamos PIB per cápita (USD corrientes): entre 3,000 y 25,000
+pibpc <- runif(n_países, min = 3000, max = 25000)
+
+# Simulamos inflación (% anual): entre -2% y 25%
+infl <- runif(n_países, min = -2, max = 25)
+
+# Simulamos esperanza de vida (años) con relación realista:
+# vida = 60 + 8*log10(pibpc) - 0.15*infl + error aleatorio
+vida <- 60 + 8 * log10(pibpc) - 0.15 * infl + rnorm(n_países, mean = 0, sd = 2)
+
+# Redondeamos vida a 1 decimal
+vida <- round(vida, 1)
+
+# Creamos data frame con nombres de países latinoamericanos
+países <- c("México", "Brasil", "Argentina", "Colombia", "Chile",
+            "Perú", "Venezuela", "Ecuador", "Bolivia", "Paraguay",
+            "Uruguay", "Costa Rica", "Panamá", "Guatemala", "Honduras",
+            "El Salvador", "Nicaragua", "Cuba")
+
+datos_sim <- data.frame(
+  país = países,
+  pibpc = round(pibpc, 2),
+  infl = round(infl, 2),
+  vida = vida
+)
+
+# Transformación logarítmica del PIBpc
+datos_sim <- datos_sim %>%
+  mutate(log_pibpc = log10(pibpc))
+
+View(datos_sim)
+glimpse(datos_sim)
+
+#========================================================
+# (2) Correlación entre variables
+#========================================================
+
+datos_corr <- datos_sim %>%
+  select(log_pibpc, vida, infl)
+
+corr_sim <- cor(datos_corr, use = "pairwise.complete.obs") %>% round(2)
+corr_sim
+
+# Matriz de correlación
+ggcorrplot(corr_sim, type = "lower", lab = TRUE, show.legend = TRUE) +
+  ggtitle("Matriz de correlación (datos simulados, 2023)")
+
+#========================================================
+# (3) Modelo: Regresión lineal múltiple
+#========================================================
+# Modelo: vida ~ log_pibpc + infl
+m1 <- lm(vida ~ log_pibpc + infl, data = datos_sim)
+
+# 3.1 Resultados del modelo
+summary(m1)
+
+#========================================================
+# (4) Resultados:
+#========================================================
+
+Call:
+lm(formula = vida ~ log_pibpc + infl, data = datos_sim)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.5912 -1.2574  0.2731  0.9935  2.7392 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 70.19394    6.26651  11.201  1.1e-08 *
+log_pibpc    5.80872    1.52892   3.799 0.001746 ** 
+infl        -0.23340    0.05134  -4.546 0.000386 *
+---
+Signif. codes:  0 ‘*’ 0.001 ‘*’ 0.01 ‘’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.614 on 15 degrees of freedom
+Multiple R-squared:  0.6797,	Adjusted R-squared:  0.637 
+F-statistic: 15.91 on 2 and 15 DF,  p-value: 0.000195
